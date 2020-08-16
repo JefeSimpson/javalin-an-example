@@ -1,4 +1,7 @@
-package org.github.com.jefesimpson.javalin.an.example;
+package org.github.com.jefesimpson.javalin.an.example.student;
+
+import org.github.com.jefesimpson.javalin.an.example.student.Student;
+import org.github.com.jefesimpson.javalin.an.example.student.StudentConnection;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,17 +19,17 @@ public class StudentCrudCommand implements StudentConnection {
     }
 
     @Override
-    public void deleteStudent(Student deleteStudent) throws SQLException {
-        dao().delete(deleteStudent);
+    public void deleteStudent(int id) throws SQLException {
+        dao().deleteById(id);
     }
 
     @Override
-    public void createStudent(Student createStudent) throws SQLException {
+    public void postStudent(Student createStudent) throws SQLException {
         dao().create(createStudent);
     }
 
     @Override
-    public void updateStudent(Student updateStudent) throws SQLException {
+    public void patchStudent(Student updateStudent) throws SQLException {
         dao().update(updateStudent);
     }
 }

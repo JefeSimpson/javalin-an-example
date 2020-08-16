@@ -1,7 +1,8 @@
-package org.github.com.jefesimpson.javalin.an.example;
+package org.github.com.jefesimpson.javalin.an.example.student;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.github.com.jefesimpson.javalin.an.example.group.StudentGroup;
 
 import java.util.Objects;
 

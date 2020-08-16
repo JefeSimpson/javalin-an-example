@@ -1,4 +1,4 @@
-package org.github.com.jefesimpson.javalin.an.example;
+package org.github.com.jefesimpson.javalin.an.example.group;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

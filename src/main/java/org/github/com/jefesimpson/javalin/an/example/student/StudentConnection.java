@@ -1,8 +1,8 @@
-package org.github.com.jefesimpson.javalin.an.example;
+package org.github.com.jefesimpson.javalin.an.example.student;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import org.github.com.jefesimpson.javalin.an.example.DatabaseUtils;
+import org.github.com.jefesimpson.javalin.an.example.connetion.DatabaseUtils;
 
 import java.sql.SQLException;
 
