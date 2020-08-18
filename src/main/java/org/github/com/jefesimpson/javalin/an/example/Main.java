@@ -2,16 +2,15 @@ package org.github.com.jefesimpson.javalin.an.example;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import org.github.com.jefesimpson.javalin.an.example.group.StudentGroup;
-import org.github.com.jefesimpson.javalin.an.example.group.StudentGroupCrudCommand;
-import org.github.com.jefesimpson.javalin.an.example.student.Student;
-import org.github.com.jefesimpson.javalin.an.example.student.StudentCrudCommand;
-import org.github.com.jefesimpson.javalin.an.example.tutor.Tutor;
-import org.github.com.jefesimpson.javalin.an.example.tutor.TutorCrudCommand;
-import org.github.com.jefesimpson.javalin.an.example.tutorstudent.TutorStudent;
-import org.github.com.jefesimpson.javalin.an.example.tutorstudent.TutorStudentCrudCommand;
+import org.github.com.jefesimpson.javalin.an.example.command.Crud;
+import org.github.com.jefesimpson.javalin.an.example.tables.StudentGroup;
+import org.github.com.jefesimpson.javalin.an.example.tables.Student;
+import org.github.com.jefesimpson.javalin.an.example.tables.Tutor;
+import org.github.com.jefesimpson.javalin.an.example.tables.TutorStudent;
 
 import java.util.Collection;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,7 +22,7 @@ public class Main {
         javalinGroupCommand(app);
         javalinTutorCommand(app);
         javalinTutorStudentCommand(app);
-        app.start(9090);
+        app.start(9999);
     }
 
 
@@ -31,47 +30,45 @@ public class Main {
         app.get("/students", context -> {
             context.result("Hello from Get ListAllStudent");
 
-            StudentCrudCommand get = new StudentCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getStudent().toString());
+            context.result(get.getAllObject(Student.class).toString());
         });
 
         app.get("/student/:id", context -> {
             context.result("Hello from Get ListStudentById");
 
-            StudentCrudCommand get = new StudentCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getStudentById(Integer.parseInt(stringParam(context,0))).toString());
+            context.result(get.getObject(Student.class ,Integer.parseInt(scannerParam(context,0))).toString());
         });
 
-        app.post("/student/:id/:firstName/:lastName/:groupId", context -> {
+        app.post("/student", context -> {
             context.result("Hello from Post Create");
 
-            StudentCrudCommand post = new StudentCrudCommand();
-            StudentGroupCrudCommand poster = new StudentGroupCrudCommand();
+            Crud post = new Crud();
 
-            StudentGroup studentGroup = poster.getStudentGroupById(Integer.parseInt(stringParam(context, 3)));
+            StudentGroup studentGroup = (StudentGroup) post.getObject(StudentGroup.class ,Integer.parseInt(scannerParam(context, 3)));
 
-            post.postStudent(new Student(Integer.parseInt(stringParam(context, 0)),stringParam(context, 1),stringParam(context, 2), studentGroup));
+            post.postObject(Student.class, new Student(Integer.parseInt(scannerParam(context, 0)),scannerParam(context, 1),scannerParam(context, 2), studentGroup));
         });
 
-        app.patch("/student/:id/:firstName/:lastName/:groupId", context -> {
+        app.patch("/student", context -> {
             context.result("Hello from Patch Update");
 
-            StudentCrudCommand patch = new StudentCrudCommand();
-            StudentGroupCrudCommand patcher = new StudentGroupCrudCommand();
+            Crud patch = new Crud();
 
-            StudentGroup studentGroup = patcher.getStudentGroupById(Integer.parseInt(stringParam(context,3)));
+            StudentGroup studentGroup = (StudentGroup) patch.getObject(StudentGroup.class ,Integer.parseInt(scannerParam(context,3)));
 
-            patch.patchStudent(new Student(Integer.parseInt(stringParam(context, 0)),stringParam(context, 1),stringParam(context, 2), studentGroup));
+            patch.patchObject(Student.class, new Student(Integer.parseInt(scannerParam(context, 0)),scannerParam(context, 1),scannerParam(context, 2), studentGroup));
         });
 
         app.delete("/student/:id", context -> {
             context.result("Hello from Delete Delete");
 
-            StudentCrudCommand delete = new StudentCrudCommand();
+            Crud delete = new Crud();
 
-            delete.deleteStudent(Integer.parseInt(stringParam(context, 0)));
+            delete.deleteObject(Student.class, Integer.parseInt(scannerParam(context, 0)));
         });
     }
 
@@ -80,41 +77,41 @@ public class Main {
         app.get("/groups", context -> {
             context.result("Hello from Get ListAllGroup");
 
-            StudentGroupCrudCommand get = new StudentGroupCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getStudentGroup().toString());
+            context.result(get.getAllObject(StudentGroup.class).toString());
         });
 
         app.get("/group/:id", context -> {
             context.result("Hello from Get ListGroupById");
 
-            StudentGroupCrudCommand get = new StudentGroupCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getStudentGroupById(Integer.parseInt(stringParam(context,0))).toString());
+            context.result(get.getObject(StudentGroup.class, Integer.parseInt(scannerParam(context,0))).toString());
         });
 
-        app.post("/group/:id/:groupName", context -> {
+        app.post("/group", context -> {
             context.result("Hello from Post Create");
 
-            StudentGroupCrudCommand post = new StudentGroupCrudCommand();
+            Crud post = new Crud();
 
-            post.postStudentGroup(new StudentGroup(Integer.parseInt(stringParam(context,0)), stringParam(context,1)));
+            post.postObject(StudentGroup.class, new StudentGroup(Integer.parseInt(scannerParam(context,0)), scannerParam(context,1)));
         });
 
-        app.patch("/group/:id/:groupName", context -> {
+        app.patch("/group", context -> {
             context.result("Hello from Patch Update");
 
-            StudentGroupCrudCommand patch = new StudentGroupCrudCommand();
+            Crud patch = new Crud();
 
-            patch.patchStudentGroup(new StudentGroup(Integer.parseInt(stringParam(context,0)), stringParam(context,1)));
+            patch.patchObject(StudentGroup.class, new StudentGroup(Integer.parseInt(scannerParam(context,0)), scannerParam(context,1)));
         });
 
         app.delete("/group/:id", context -> {
             context.result("Hello from Delete Delete");
 
-            StudentGroupCrudCommand delete = new StudentGroupCrudCommand();
+            Crud delete = new Crud();
 
-            delete.deleteStudentGroup(Integer.parseInt(stringParam(context, 0)));
+            delete.deleteObject(StudentGroup.class, Integer.parseInt(scannerParam(context, 0)));
         });
     }
 
@@ -123,47 +120,45 @@ public class Main {
         app.get("/tutors", context -> {
             context.result("Hello from Get ListAllTutor");
 
-            TutorCrudCommand get = new TutorCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getTutor().toString());
+            context.result(get.getAllObject(Tutor.class).toString());
         });
 
         app.get("/tutor/:id", context -> {
             context.result("Hello from Get ListTutorById");
 
-            TutorCrudCommand get = new TutorCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getTutorById(Integer.parseInt(stringParam(context,0))).toString());
+            context.result(get.getObject(Tutor.class, Integer.parseInt(scannerParam(context,0))).toString());
         });
 
-        app.post("/tutor/:id/:firstName/:lastName/:groupId", context -> {
+        app.post("/tutor", context -> {
             context.result("Hello from Post Create");
 
-            TutorCrudCommand post = new TutorCrudCommand();
-            StudentGroupCrudCommand poster = new StudentGroupCrudCommand();
+            Crud post = new Crud();
 
-            StudentGroup studentGroup = poster.getStudentGroupById(Integer.parseInt(stringParam(context, 3)));
+            StudentGroup studentGroup = (StudentGroup) post.getObject(StudentGroup.class, Integer.parseInt(scannerParam(context, 3)));
 
-            post.postTutor(new Tutor(Integer.parseInt(stringParam(context, 0)),stringParam(context, 1),stringParam(context, 2), studentGroup));
+            post.postObject(Tutor.class, new Tutor(Integer.parseInt(scannerParam(context, 0)),scannerParam(context, 1),scannerParam(context, 2), studentGroup));
         });
 
-        app.patch("/tutor/:id/:firstName/:lastName/:groupId", context -> {
+        app.patch("/tutor", context -> {
             context.result("Hello from Patch Update");
 
-            TutorCrudCommand patch = new TutorCrudCommand();
-            StudentGroupCrudCommand patcher = new StudentGroupCrudCommand();
+            Crud patch = new Crud();
 
-            StudentGroup studentGroup = patcher.getStudentGroupById(Integer.parseInt(stringParam(context,3)));
+            StudentGroup studentGroup = (StudentGroup) patch.getObject(StudentGroup.class, Integer.parseInt(scannerParam(context, 3)));
 
-            patch.patchTutor(new Tutor(Integer.parseInt(stringParam(context, 0)),stringParam(context, 1),stringParam(context, 2), studentGroup));
+            patch.patchObject(Tutor.class, new Tutor(Integer.parseInt(scannerParam(context, 0)),scannerParam(context, 1),scannerParam(context, 2), studentGroup));
         });
 
         app.delete("/tutor/:id", context -> {
             context.result("Hello from Delete Delete");
 
-            TutorCrudCommand delete = new TutorCrudCommand();
+            Crud delete = new Crud();
 
-            delete.deleteTutor(Integer.parseInt(stringParam(context, 0)));
+            delete.deleteObject(Tutor.class, Integer.parseInt(scannerParam(context, 0)));
         });
     }
 
@@ -172,51 +167,47 @@ public class Main {
         app.get("/tutorStudents", context -> {
             context.result("Hello from Get ListAllTutorStudent");
 
-            TutorStudentCrudCommand get = new TutorStudentCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getTutorStudent().toString());
+            context.result(get.getAllObject(TutorStudent.class).toString());
         });
 
         app.get("/tutorStudent/:id", context -> {
             context.result("Hello from Get ListTutorStudentById");
 
-            TutorStudentCrudCommand get = new TutorStudentCrudCommand();
+            Crud get = new Crud();
 
-            context.result(get.getTutorStudentById(Integer.parseInt(stringParam(context,0))).toString());
+            context.result(get.getObject(TutorStudent.class, Integer.parseInt(scannerParam(context,0))).toString());
         });
 
-        app.post("/tutorStudent/:id/:studentId/:tutorId", context -> {
+        app.post("/tutorStudent", context -> {
             context.result("Hello from Post Create");
 
-            TutorStudentCrudCommand post = new TutorStudentCrudCommand();
-            StudentCrudCommand poster = new StudentCrudCommand();
-            TutorCrudCommand toaster = new TutorCrudCommand();
+            Crud post = new Crud();
 
-            Student student = poster.getStudentById(Integer.parseInt(stringParam(context, 1)));
-            Tutor tutor = toaster.getTutorById(Integer.parseInt(stringParam(context,2)));
+            Student student = (Student) post.getObject(Student.class, Integer.parseInt(scannerParam(context, 1)));
+            Tutor tutor = (Tutor) post.getObject(Tutor.class, Integer.parseInt(scannerParam(context,2)));
 
-            post.postTutorStudent(new TutorStudent(Integer.parseInt(stringParam(context,0)), student, tutor));
+            post.postObject(TutorStudent.class, new TutorStudent(Integer.parseInt(scannerParam(context,0)), student, tutor));
         });
 
-        app.patch("/tutorStudent/:id/:studentId/:tutorId", context -> {
+        app.patch("/tutorStudent", context -> {
             context.result("Hello from Patch Update");
 
-            TutorStudentCrudCommand patch = new TutorStudentCrudCommand();
-            StudentCrudCommand patcher = new StudentCrudCommand();
-            TutorCrudCommand toaster = new TutorCrudCommand();
+            Crud patch = new Crud();
 
-            Student student = patcher.getStudentById(Integer.parseInt(stringParam(context, 1)));
-            Tutor tutor = toaster.getTutorById(Integer.parseInt(stringParam(context,2)));
+            Student student = (Student) patch.getObject(Student.class, Integer.parseInt(scannerParam(context, 1)));
+            Tutor tutor = (Tutor) patch.getObject(Tutor.class, Integer.parseInt(scannerParam(context,2)));
 
-            patch.patchTutorStudent(new TutorStudent(Integer.parseInt(stringParam(context,0)), student, tutor));
+            patch.patchObject(TutorStudent.class, new TutorStudent(Integer.parseInt(scannerParam(context,0)), student, tutor));
         });
 
         app.delete("/tutorStudent/:id", context -> {
             context.result("Hello from Delete Delete");
 
-            TutorStudentCrudCommand delete = new TutorStudentCrudCommand();
+            Crud delete = new Crud();
 
-            delete.deleteTutorStudent(Integer.parseInt(stringParam(context, 0)));
+            delete.deleteObject(TutorStudent.class, Integer.parseInt(scannerParam(context, 0)));
         });
     }
 
@@ -227,5 +218,11 @@ public class Main {
         return array[i];
     }
 
+    public static String scannerParam(Context context, int i){
+        Scanner scanner = new Scanner(context.body());
+        Stream<String> strings = scanner.tokens();
+        String[] array = strings.toArray(String[]::new);
+        return array[i];
+    }
 
 }

@@ -3,10 +3,10 @@ package org.github.com.jefesimpson.javalin.an.example.connetion;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import org.github.com.jefesimpson.javalin.an.example.student.Student;
-import org.github.com.jefesimpson.javalin.an.example.group.StudentGroup;
-import org.github.com.jefesimpson.javalin.an.example.tutor.Tutor;
-import org.github.com.jefesimpson.javalin.an.example.tutorstudent.TutorStudent;
+import org.github.com.jefesimpson.javalin.an.example.tables.Student;
+import org.github.com.jefesimpson.javalin.an.example.tables.StudentGroup;
+import org.github.com.jefesimpson.javalin.an.example.tables.Tutor;
+import org.github.com.jefesimpson.javalin.an.example.tables.TutorStudent;
 
 import java.sql.SQLException;
 
