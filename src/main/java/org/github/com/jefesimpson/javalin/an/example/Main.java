@@ -1,5 +1,6 @@
 package org.github.com.jefesimpson.javalin.an.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.github.com.jefesimpson.javalin.an.example.command.Crud;
@@ -31,16 +32,18 @@ public class Main {
             context.result("Hello from Get ListAllStudent");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getAllObject(Student.class).toString());
+            context.result(objectMapper.writeValueAsString(get.getAllObject(Student.class)));
         });
 
         app.get("/student/:id", context -> {
             context.result("Hello from Get ListStudentById");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getObject(Student.class ,Integer.parseInt(scannerParam(context,0))).toString());
+            context.result(objectMapper.writeValueAsString(get.getObject(Student.class , stringIdParam(context))));
         });
 
         app.post("/student", context -> {
@@ -68,7 +71,7 @@ public class Main {
 
             Crud delete = new Crud();
 
-            delete.deleteObject(Student.class, Integer.parseInt(scannerParam(context, 0)));
+            delete.deleteObject(Student.class, stringIdParam(context));
         });
     }
 
@@ -78,16 +81,18 @@ public class Main {
             context.result("Hello from Get ListAllGroup");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getAllObject(StudentGroup.class).toString());
+            context.result(objectMapper.writeValueAsString(get.getAllObject(StudentGroup.class)));
         });
 
         app.get("/group/:id", context -> {
             context.result("Hello from Get ListGroupById");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getObject(StudentGroup.class, Integer.parseInt(scannerParam(context,0))).toString());
+            context.result(objectMapper.writeValueAsString(get.getObject(StudentGroup.class, stringIdParam(context))));
         });
 
         app.post("/group", context -> {
@@ -111,7 +116,7 @@ public class Main {
 
             Crud delete = new Crud();
 
-            delete.deleteObject(StudentGroup.class, Integer.parseInt(scannerParam(context, 0)));
+            delete.deleteObject(StudentGroup.class, stringIdParam(context));
         });
     }
 
@@ -121,16 +126,18 @@ public class Main {
             context.result("Hello from Get ListAllTutor");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getAllObject(Tutor.class).toString());
+            context.result(objectMapper.writeValueAsString(get.getAllObject(Tutor.class)));
         });
 
         app.get("/tutor/:id", context -> {
             context.result("Hello from Get ListTutorById");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getObject(Tutor.class, Integer.parseInt(scannerParam(context,0))).toString());
+            context.result(objectMapper.writeValueAsString(get.getObject(Tutor.class, stringIdParam(context))));
         });
 
         app.post("/tutor", context -> {
@@ -158,7 +165,7 @@ public class Main {
 
             Crud delete = new Crud();
 
-            delete.deleteObject(Tutor.class, Integer.parseInt(scannerParam(context, 0)));
+            delete.deleteObject(Tutor.class, stringIdParam(context));
         });
     }
 
@@ -168,16 +175,18 @@ public class Main {
             context.result("Hello from Get ListAllTutorStudent");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getAllObject(TutorStudent.class).toString());
+            context.result(objectMapper.writeValueAsString(get.getAllObject(TutorStudent.class)));
         });
 
         app.get("/tutorStudent/:id", context -> {
             context.result("Hello from Get ListTutorStudentById");
 
             Crud get = new Crud();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            context.result(get.getObject(TutorStudent.class, Integer.parseInt(scannerParam(context,0))).toString());
+            context.result(objectMapper.writeValueAsString(get.getObject(TutorStudent.class, stringIdParam(context))));
         });
 
         app.post("/tutorStudent", context -> {
@@ -207,22 +216,24 @@ public class Main {
 
             Crud delete = new Crud();
 
-            delete.deleteObject(TutorStudent.class, Integer.parseInt(scannerParam(context, 0)));
+            delete.deleteObject(TutorStudent.class, stringIdParam(context));
         });
     }
 
 
-    public static String stringParam(Context context, int i){
-        Collection<String> strings = context.pathParamMap().values();
-        String[] array = strings.toArray(String[]::new);
-        return array[i];
+    public static int stringIdParam(Context context){
+        return Integer.parseInt(context.pathParam("id"));
     }
 
     public static String scannerParam(Context context, int i){
         Scanner scanner = new Scanner(context.body());
         Stream<String> strings = scanner.tokens();
         String[] array = strings.toArray(String[]::new);
-        return array[i];
+        System.out.println(array);
+        String a = array[i];
+
+        return a;
+
     }
 
 }
